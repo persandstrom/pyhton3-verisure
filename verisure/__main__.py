@@ -5,6 +5,7 @@ import json
 import re
 import click
 import logging
+import getpass
 from verisure import VariableTypes, Session, ResponseError, LoginError
 
 
@@ -102,15 +103,20 @@ def make_query(session, name, arguments):
 
 @click.command()
 @click.argument('username')
-@click.argument('password')
+@click.argument('password', required=False)
 @click.option('-i', '--installation', 'installation', help='Installation number', type=int, default=0)  # noqa: E501
 @click.option('-c', '--cookie', 'cookie', help='File to store cookie in', default='~/.verisure-cookie')  # noqa: E501
 @click.option('--mfa', 'mfa', help='Login using MFA', default=False, is_flag=True)  # noqa: E501
 @click.option('--log-level', type=click.Choice(['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'], case_sensitive=False))  # noqa: E501
 @options_from_operator_list()
 def cli(username, password, installation, cookie, mfa, log_level, **kwargs):
-    """Read and change status of verisure devices through verisure app API"""
+    """
+    Read and change status of verisure devices through verisure app API\n
+    PASSWORD will be prompted without echoing if not provided as an argument
+    """
 
+    if not password:
+        password = getpass.getpass(prompt='Password: ', stream=None)
     if log_level:
         logging.basicConfig(level=logging.getLevelName(log_level))
 

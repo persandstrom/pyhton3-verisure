@@ -12,6 +12,7 @@ devices.
 ## Version History
 
 ```txt
+2.6.8 Added prompt for password
 2.6.7 Add logging option for CLI, do not send empty requests
 2.6.6 Enable trust
 2.6.5 Add logging
